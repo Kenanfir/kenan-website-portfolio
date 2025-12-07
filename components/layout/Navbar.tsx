@@ -22,7 +22,7 @@ export function Navbar() {
             <div className="container flex h-16 items-center lg:px-48 px-4 justify-between">
                 <div className="flex items-center gap-8">
                     <Link href="/" className="font-bold text-xl tracking-tight">
-                        Joybait
+                        Home
                     </Link>
                     <div className="hidden md:flex gap-6">
                         {links.map((link) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ScrollControls, Scroll, useScroll } from "@react-three/drei";
 import { Corridor } from "./Corridor";
@@ -100,35 +101,35 @@ export function LandingScene() {
                             </section>
 
                             {/* Section 3: Final Category Menu */}
-                            <section className="h-screen flex flex-col items-center justify-center relative z-40">
+                            <section className="h-screen flex flex-col items-center justify-center relative z-40 pointer-events-auto">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl px-8">
                                     {/* Large Stylish Links */}
                                     <div className="col-span-1 md:col-span-2 text-center mb-8">
                                         <h2 className="text-sm font-bold tracking-widest text-purple-500 mb-4 uppercase">Select Protocol</h2>
                                     </div>
 
-                                    <a href="#game" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
+                                    <Link href="/game" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
                                         <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <h3 className="text-4xl md:text-6xl font-black text-white mb-2 relative z-10 group-hover:translate-x-2 transition-transform">GAME DEV</h3>
                                         <p className="text-gray-400 text-lg relative z-10 group-hover:text-white transition-colors">Unreal • Unity • C++</p>
-                                    </a>
+                                    </Link>
 
-                                    <a href="#apps" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
+                                    <Link href="/apps" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
                                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <h3 className="text-4xl md:text-6xl font-black text-white mb-2 relative z-10 group-hover:translate-x-2 transition-transform">APPS</h3>
                                         <p className="text-gray-400 text-lg relative z-10 group-hover:text-white transition-colors">iOS • SwiftUI • React</p>
-                                    </a>
+                                    </Link>
 
                                     <div className="col-span-1 md:col-span-2 grid grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <a href="#tech" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
+                                        <Link href="/tech" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
                                             <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Tech / Tools</span>
-                                        </a>
-                                        <a href="#academics" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
+                                        </Link>
+                                        <Link href="/academics" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
                                             <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Academics</span>
-                                        </a>
-                                        <a href="#random" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center lg:col-span-1 col-span-2 rounded-xl">
+                                        </Link>
+                                        <Link href="/random" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center lg:col-span-1 col-span-2 rounded-xl">
                                             <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Random</span>
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             </section>
