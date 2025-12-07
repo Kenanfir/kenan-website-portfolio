@@ -29,7 +29,7 @@ export function LogoPlaceholder() {
                 ref={meshRef}
                 onPointerOver={() => setHover(true)}
                 onPointerOut={() => setHover(false)}
-                scale={hovered ? 1.1 : 1}
+                scale={1.5}
             >
                 {/* Head/Badge Placeholder */}
                 <mesh position={[0, 0, 0]}>
@@ -38,36 +38,15 @@ export function LogoPlaceholder() {
                         color="#9333ea"
                         wireframe={true}
                         emissive="#9333ea"
-                        emissiveIntensity={0.5}
+                        emissiveIntensity={1}
                     />
                 </mesh>
 
                 {/* Inner solid */}
-                <mesh position={[0, 0, 0]} scale={0.9}>
+                {/* <mesh position={[0, 0, 0]} scale={0.9}>
                     <icosahedronGeometry args={[1, 0]} />
-                    <meshStandardMaterial color="#000" />
-                </mesh>
-
-                {/* Eyes/Smile placeholder */}
-                <mesh position={[-0.3, 0.2, 0.8]} rotation={[0, 0, 0]}>
-                    <sphereGeometry args={[0.1, 16, 16]} />
-                    <meshBasicMaterial color="white" />
-                </mesh>
-                <mesh position={[0.3, 0.2, 0.8]} rotation={[0, 0, 0]}>
-                    <sphereGeometry args={[0.1, 16, 16]} />
-                    <meshBasicMaterial color="white" />
-                </mesh>
-
-                {/* Smile Curve */}
-                <Text
-                    position={[0, -0.3, 0.8]}
-                    fontSize={0.5}
-                    color="white"
-                    anchorX="center"
-                    anchorY="middle"
-                >
-                    ‿
-                </Text>
+                    <meshStandardMaterial color="#2a0a2bff" />
+                </mesh> */}
 
             </group>
         </Float>

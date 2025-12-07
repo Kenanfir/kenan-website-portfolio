@@ -4,23 +4,50 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ScrollControls, Scroll, useScroll } from "@react-three/drei";
 import { Corridor } from "./Corridor";
 import { LogoPlaceholder } from "./LogoPlaceholder";
-import { CategoryCard } from "@/components/ui/CategoryCard";
 import { contact } from "@/data/content";
-import { Github, Linkedin, Mail } from "lucide-react";
-import { Category } from "@/data/types";
-import { Suspense, useRef, useState } from "react";
+import { Github, Linkedin, Mail, ArrowDown } from "lucide-react";
+import { Suspense, useRef, useState, useMemo } from "react";
 import * as THREE from "three";
+import { FloatingCategory } from "./FloatingCategory";
+
+function HeroSection() {
+    const scroll = useScroll();
+    const ref = useRef<HTMLElement>(null);
+
+    useFrame(() => {
+        if (ref.current) {
+            // Fade out completely by 20% of scroll
+            const opacity = 1 - (scroll.offset * 5);
+            ref.current.style.opacity = Math.max(0, Math.min(1, opacity)).toString();
+            // Optional: Translate up slightly
+            // ref.current.style.transform = `translateY(${-scroll.offset * 500}px)`;
+        }
+    });
+
+    return (
+        <section ref={ref} className="h-screen flex flex-col items-center justify-center text-white pointer-events-none p-4 relative">
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter mb-4 mix-blend-difference select-none text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">
+                KENAN
+            </h1>
+            <p className="text-xl md:text-2xl font-light tracking-[0.5em] text-purple-200/80 uppercase">Game Programmer</p>
+            <div className="mt-12 flex gap-8 pointer-events-auto">
+                <a href={`mailto:${contact.email}`} className="text-gray-400 hover:text-white transition-all transform hover:scale-110"><Mail size={24} /></a>
+                <a href={`https://linkedin.com/in/${contact.linkedin}`} className="text-gray-400 hover:text-white transition-all transform hover:scale-110"><Linkedin size={24} /></a>
+                <a href={`https://github.com/${contact.github}`} className="text-gray-400 hover:text-white transition-all transform hover:scale-110"><Github size={24} /></a>
+            </div>
+            <div className="absolute bottom-10 animate-pulse text-xs tracking-widest text-gray-500 flex flex-col items-center gap-2">
+                SCROLL TO EXPLORE
+                <ArrowDown size={14} />
+            </div>
+        </section>
+    );
+}
 
 function SceneContent() {
     const scroll = useScroll();
-    const cameraRef = useRef<THREE.Group>(null);
 
     useFrame((state, delta) => {
         // Scroll progress 0 to 1
-        const r1 = scroll.range(0, 1 / 3); // 0 to 0.33
-        const r2 = scroll.range(1 / 3, 1 / 3); // 0.33 to 0.66
-        const r3 = scroll.range(2 / 3, 1 / 3); // 0.66 to 1
-
         // Move camera forward based on scroll
         // Start at Z=5, end at Z=-60 (end of corridor)
         const targetZ = 5 - (scroll.offset * 65);
@@ -32,6 +59,7 @@ function SceneContent() {
         } else {
             state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, 1.5, 0.1);
         }
+
     });
 
     return (
@@ -39,6 +67,13 @@ function SceneContent() {
             <group position={[0, 0, 0]}>
                 <LogoPlaceholder />
             </group>
+
+            {/* Floating Categories along the path */}
+            {/* Z positions need to be negative, further down the corridor */}
+            <FloatingCategory text="GAME DEV" position={[0, 1.5, -15]} color="#a855f7" />
+            <FloatingCategory text="APPS / iOS" position={[0, 1.5, -30]} color="#3b82f6" />
+            <FloatingCategory text="TECH / TOOLS" position={[0, 1.5, -45]} color="#22c55e" />
+
             <Corridor count={25} spacing={3} />
         </>
     );
@@ -46,77 +81,54 @@ function SceneContent() {
 
 export function LandingScene() {
     return (
-        <div className="h-screen w-full bg-black">
+        <div className="h-screen w-full bg-black relative overflow-hidden">
             <Canvas shadows camera={{ position: [0, 1.5, 5], fov: 50 }}>
                 <fog attach="fog" args={['#000', 5, 20]} />
                 <ambientLight intensity={0.2} />
 
                 <Suspense fallback={null}>
-                    <ScrollControls pages={3} damping={0.2}>
-
-                        {/* 3D Content moved by scroll logic (Camera moves, content stays) */}
+                    <ScrollControls pages={4} damping={0.2}> {/* Increased pages for longer walk */}
                         <SceneContent />
 
-                        {/* Scrolling HTML Overlay */}
-                        <Scroll html style={{ width: '100%' }}>
+                        <Scroll html style={{ width: '100%', pointerEvents: 'none', zIndex: 40 }}>
 
-                            {/* Section 1: Hero */}
-                            <section className="h-screen flex flex-col items-center justify-center text-white pointer-events-none p-4">
-                                <h1 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 mix-blend-difference">KENAN</h1>
-                                <p className="text-xl md:text-2xl font-light tracking-widest text-purple-200/80 uppercase">Game Programmer</p>
-                                <div className="mt-8 flex gap-6 pointer-events-auto">
-                                    {/* Socials logic duplicated here or make reusable */}
-                                    <a href={`mailto:${contact.email}`} className="hover:text-purple-400 transition-colors"><Mail /></a>
-                                    <a href={`https://linkedin.com/in/${contact.linkedin}`} className="hover:text-purple-400 transition-colors"><Linkedin /></a>
-                                    <a href={`https://github.com/${contact.github}`} className="hover:text-purple-400 transition-colors"><Github /></a>
-                                </div>
-                                <div className="absolute bottom-10 animate-bounce text-sm opacity-50">
-                                    SCROLL TO ENTER
-                                </div>
+                            <HeroSection />
+
+                            {/* Section 2: Walking area (Spacer) */}
+                            <section className="h-[200vh] pointer-events-none">
+                                {/* Empty space for the "walk" */}
                             </section>
 
-                            {/* Section 2: Spacer for "Walking" */}
-                            <section className="h-screen flex items-center justify-center pointer-events-none">
-                                {/* Empty, maybe some drifting text */}
-                            </section>
+                            {/* Section 3: Final Category Menu */}
+                            <section className="h-screen flex flex-col items-center justify-center relative z-40">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl px-8">
+                                    {/* Large Stylish Links */}
+                                    <div className="col-span-1 md:col-span-2 text-center mb-8">
+                                        <h2 className="text-sm font-bold tracking-widest text-purple-500 mb-4 uppercase">Select Protocol</h2>
+                                    </div>
 
-                            {/* Section 3: Categories Selection */}
-                            <section className="h-screen flex flex-col items-center justify-center p-4 md:p-12">
-                                <div className="bg-black/80 backdrop-blur-md border border-purple-500/20 p-8 rounded-3xl w-full max-w-6xl shadow-2xl shadow-purple-900/20">
-                                    <h2 className="text-3xl font-bold text-white mb-8 text-center">Select Protocols</h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        <div className="lg:col-span-2 lg:row-span-2">
-                                            <CategoryCard
-                                                category="game"
-                                                title="Game Development"
-                                                description="Core expertise. Unreal Engine, Unity, AI Systems."
-                                                delay={0.1}
-                                            />
-                                        </div>
-                                        <CategoryCard
-                                            category="apps"
-                                            title="Apps / iOS"
-                                            description="Swift, SwiftUI, Utilities."
-                                            delay={0.2}
-                                        />
-                                        <CategoryCard
-                                            category="tech"
-                                            title="Tech / Tools"
-                                            description="Pipelines, Scripts, Server."
-                                            delay={0.3}
-                                        />
-                                        <CategoryCard
-                                            category="random"
-                                            title="Random"
-                                            description="Side quests & fun."
-                                            delay={0.4}
-                                        />
-                                        <CategoryCard
-                                            category="academics"
-                                            title="Academics"
-                                            description="Research, Teaching, Publications."
-                                            delay={0.5}
-                                        />
+                                    <a href="#game" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <h3 className="text-4xl md:text-6xl font-black text-white mb-2 relative z-10 group-hover:translate-x-2 transition-transform">GAME DEV</h3>
+                                        <p className="text-gray-400 text-lg relative z-10 group-hover:text-white transition-colors">Unreal • Unity • C++</p>
+                                    </a>
+
+                                    <a href="#apps" className="group relative block p-8 border border-white/10 bg-white/5 backdrop-blur-sm rounded-2xl hover:bg-white/10 transition-all duration-500 overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        <h3 className="text-4xl md:text-6xl font-black text-white mb-2 relative z-10 group-hover:translate-x-2 transition-transform">APPS</h3>
+                                        <p className="text-gray-400 text-lg relative z-10 group-hover:text-white transition-colors">iOS • SwiftUI • React</p>
+                                    </a>
+
+                                    <div className="col-span-1 md:col-span-2 grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <a href="#tech" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
+                                            <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Tech / Tools</span>
+                                        </a>
+                                        <a href="#academics" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center rounded-xl">
+                                            <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Academics</span>
+                                        </a>
+                                        <a href="#random" className="group p-6 border border-white/5 bg-black/20 hover:border-white/20 transition-all text-center lg:col-span-1 col-span-2 rounded-xl">
+                                            <span className="block text-xl font-bold text-gray-300 group-hover:text-white">Random</span>
+                                        </a>
                                     </div>
                                 </div>
                             </section>

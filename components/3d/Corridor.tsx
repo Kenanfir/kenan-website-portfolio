@@ -37,19 +37,19 @@ export function Corridor({ count = 20, spacing = 8 }) {
             {/* Floor */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, -count * spacing / 2]}>
                 <planeGeometry args={[10, count * spacing]} />
-                <meshStandardMaterial color="#0a0a0a" roughness={0.8} />
+                <meshStandardMaterial color="#57544bff" roughness={0.8} />
             </mesh>
 
             {/* Ceiling */}
             <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 2, -count * spacing / 2]}>
                 <planeGeometry args={[10, count * spacing]} />
-                <meshStandardMaterial color="#050505" roughness={0.9} />
+                <meshStandardMaterial color="#ffffb6ff" roughness={0.9} />
             </mesh>
 
             {/* Walls Instanced */}
             <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
                 <boxGeometry />
-                <meshStandardMaterial color="#1a1a1a" roughness={0.5} />
+                <meshStandardMaterial color="#b5b5b5ff" roughness={0.5} />
             </instancedMesh>
 
             {/* Dynamic lights along the corridor */}
